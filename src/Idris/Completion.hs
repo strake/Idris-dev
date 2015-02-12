@@ -9,7 +9,7 @@ import Idris.AbsSyntaxTree
 import Idris.Help
 import Idris.Imports (installedPackages)
 import Idris.Colours
-import Idris.ParseHelpers(opChars)
+import Idris.ParseHelpers(isOpChar)
 import qualified Idris.ParseExpr (constants, tactics)
 import Idris.ParseExpr (TacticArg (..))
 import Idris.REPLParser (allHelp)
@@ -73,10 +73,10 @@ completeName extra n = do ns <- names
                           return $ completeWith (extra ++ ns) n
 
 completeExpr :: [String] -> CompletionFunc Idris
-completeExpr extra = completeWord Nothing (" \t(){}:" ++ opChars) (completeName extra)
+completeExpr extra = completeWord Nothing (" \t(){}:" ++ filter isOpChar ['\0'..]) (completeName extra)
 
 completeMetaVar :: CompletionFunc Idris
-completeMetaVar = completeWord Nothing (" \t(){}:" ++ opChars) completeM
+completeMetaVar = completeWord Nothing (" \t(){}:" ++ filter isOpChar ['\0'..]) completeM
     where completeM m = do mvs <- metavars
                            return $ completeWith mvs m
 

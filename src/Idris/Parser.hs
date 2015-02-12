@@ -380,7 +380,7 @@ fnDecl' syn = checkFixity $
           getName (PTy _ _ _ _ _ n _) = Just n
           getName _ = Nothing
           fixityOK (NS n _) = fixityOK n
-          fixityOK (UN n)  | all (flip elem opChars) (str n) =
+          fixityOK (UN n)  | all isOpChar (str n) =
                                do fixities <- fmap idris_infixes get
                                   return . elem (str n) . map (\ (Fix _ op) -> op) $ fixities
                            | otherwise                 = return True

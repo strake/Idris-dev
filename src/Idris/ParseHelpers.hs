@@ -28,6 +28,7 @@ import Control.Applicative
 import Control.Monad
 import Control.Monad.State.Strict
 
+import Data.Foldable.Unicode;
 import Data.Maybe
 import qualified Data.List.Split as Spl
 import Data.List
@@ -317,11 +318,11 @@ mkName (n, ns) = sNS (sUN n) (reverse (parseNS ns))
                       (x, "")    -> [x]
                       (x, '.':y) -> x : parseNS y
 
-opChars :: String
-opChars = ":!#$%&*+./<=>?@\\^|-~"
+isOpChar :: Char -> Bool;
+isOpChar = liftA2 (&&) (liftA2 (||) isPunctuation isSymbol) (∉ "_()[]{};,`'\"");
 
 operatorLetter :: MonadicParsing m => m Char
-operatorLetter = oneOf opChars
+operatorLetter = satisfy isOpChar;
 
 -- | Parses an operator
 operator :: MonadicParsing m => m String

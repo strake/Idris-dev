@@ -9,7 +9,7 @@ import Idris.Core.TT (Name (..), sUN, SpecialName (..), OutputAnnotation (..),
 import Idris.Core.Evaluate (ctxtAlist, Def (..), lookupDefAcc,
                             Accessibility (..), isDConName, isFnName,
                             isTConName)
-import Idris.ParseHelpers (opChars)
+import Idris.ParseHelpers (isOpChar)
 import Idris.AbsSyntax
 import Idris.Docs
 import Idris.Docstrings (nullDocstring)
@@ -519,7 +519,7 @@ genTypeHeader ist (FD n _ args ftype _) = do
 
         name (NS n ns) = show (NS (sUN $ name n) ns)
         name n         = let n' = show n
-                         in  if (head n') `elem` opChars
+                         in  if isOpChar (head n')
                                 then '(':(n' ++ ")")
                                 else n'
 
@@ -587,7 +587,7 @@ createOtherDoc ist (ClassDoc n docstring fds _ _ _) = do
 
   where name (NS n ns) = show (NS (sUN $ name n) ns)
         name n         = let n' = show n
-                         in  if (head n') `elem` opChars
+                         in  if isOpChar (head n')
                                 then '(':(n' ++ ")")
                                 else n'
 
